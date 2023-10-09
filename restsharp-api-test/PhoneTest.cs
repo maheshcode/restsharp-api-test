@@ -61,5 +61,20 @@ namespace restsharp_api_test
             var expectedMsg = "Object with id = " + createdPhone.Id + " has been deleted.";
             Assert.Equal(expectedMsg, deletedMsg.Message);
         }
+
+        [Fact]
+        public void testPatchUpdateObject()
+        {
+            Phone phone = DataHelper.getPhoneData();
+            APIHelper objectsApiHelper = new APIHelper();
+            Phone createdPhone = objectsApiHelper.createPhone(phone);
+            var body = $$"""
+                    {
+                        "name": "Apple MacBook Pro 16 (Updated Name)"
+                    }
+                    """;
+            Phone updatedPhone = objectsApiHelper.patchUpdatePhone(body,createdPhone.Id);
+            Assert.Equal("Apple MacBook Pro 16 (Updated Name)", updatedPhone.Name);
+        }
     }
 } 

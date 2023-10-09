@@ -26,30 +26,40 @@ namespace restsharp_api_test
 
         public Phone getPhoneById(String id)
             {
-                var request = new RestRequest(basePath+"/{id}")
-                                .AddUrlSegment("id", id);
+                var request = getRestRquestId(id);
                 return restClient.Get<Phone>(request);
             }
         public Phone createPhone(Phone phone) 
             {
                 var request = new RestRequest(basePath);
                 request.AddBody(phone);
+                RestResponse response = restClient.Execute(request);
                 return restClient.Post<Phone>(request);
             }
 
         public Phone updatePhone(Phone phone)
             {
-                var request = new RestRequest(basePath + "/{id}")
-                                .AddUrlSegment("id", phone.Id);
+                var request = getRestRquestId(phone.Id);
                 request.AddBody(phone);
                 return restClient.Put<Phone>(request); ;
             }
 
         public DeletedMsg deletePhone(String id)
             {
-                var request = new RestRequest(basePath + "/{id}")
-                                .AddUrlSegment("id", id);
+                var request = getRestRquestId(id);
                 return restClient.Delete<DeletedMsg>(request);
             }
+
+        public Phone patchUpdatePhone(String bodyContent,string id)
+        {
+            var request = getRestRquestId(id);
+            request.AddStringBody(bodyContent, DataFormat.Json);
+            return restClient.Patch<Phone>(request); ;
+        }
+
+        private RestRequest getRestRquestId(string id) {
+            return new RestRequest(basePath + "/{id}")
+                            .AddUrlSegment("id", id);
+        }
     }
 }
